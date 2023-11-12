@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 # -------------------------------------------------------------------------------
-# Name:        sfp_shodan
-# Purpose:     Search Shodan for information related to the target.
+# Name:        sfp_zoomeye
+# Purpose:     Search Zoomeye for information related to the target.
 #
-# Author:      Steve Micallef <steve@binarypool.com>
+# Author:      Alessio D'Ospina <alessiodos@gmail.com>
 #
-# Created:     19/03/2014
-# Copyright:   (c) Steve Micallef
+# Created:     11/11/2024
+# Copyright:   (c) Alessio D'Ospina
 # Licence:     MIT
 # -------------------------------------------------------------------------------
 
