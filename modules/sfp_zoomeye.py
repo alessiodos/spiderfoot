@@ -21,33 +21,31 @@ from netaddr import IPNetwork
 from spiderfoot import SpiderFootEvent, SpiderFootPlugin
 
 
-class sfp_shodan(SpiderFootPlugin):
+class sfp_zoomeye(SpiderFootPlugin):
 
     meta = {
-        'name': "SHODAN",
-        'summary': "Obtain information from SHODAN about identified IP addresses.",
+        'name': "ZOOMEYE",
+        'summary': "Obtain information from ZOOMEYE about identified IP addresses.",
         'flags': ["apikey"],
         'useCases': ["Footprint", "Investigate", "Passive"],
         'categories': ["Search Engines"],
         'dataSource': {
-            'website': "https://www.shodan.io/",
+            'website': "https://www.zoomeye.org/",
             'model': "FREE_AUTH_LIMITED",
             'references': [
-                "https://developer.shodan.io/api",
-                "https://developer.shodan.io/apps"
+                "https://www.zoomeye.org/doc"
             ],
             'apiKeyInstructions': [
-                "Visit https://shodan.io",
+                "Visit https://www.zoomeye.org",
                 "Register a free account",
-                "Navigate to https://account.shodan.io/",
-                "The API key is listed under 'API Key'"
+                "For each account, a string of API-KEY will be found at the bottom of its profile page. Fill the string into the API-KEY field of Zoomeye-API"
             ],
-            'favIcon': "https://static.shodan.io/shodan/img/favicon.png",
-            'logo': "https://static.shodan.io/developer/img/logo.png",
-            'description': "Shodan is the world's first search engine for Internet-connected devices.\n"
-            "Use Shodan to discover which of your devices are connected to the Internet, where they are located and who is using them."
+            'favIcon': "https://pbs.twimg.com/profile_images/677044790161207296/z_Xny6Gg_400x400.jpg",
+            'logo': "https://pbs.twimg.com/profile_images/677044790161207296/z_Xny6Gg_400x400.jpg",
+            'description': "Zoomeye is a search engine for Internet-connected devices.\n"
+            "Use Zoomeye to discover which of your devices are connected to the Internet, where they are located and who is using them."
             "Keep track of all the computers on your network that are directly accessible from the Internet. "
-            "Shodan lets you understand your digital footprint.",
+            "Zoomeye lets you understand your digital footprint.",
         }
     }
 
@@ -60,7 +58,7 @@ class sfp_shodan(SpiderFootPlugin):
 
     # Option descriptions
     optdescs = {
-        "api_key": "SHODAN API Key.",
+        "api_key": "ZOOMEYE API Key.",
         'netblocklookup': "Look up all IPs on netblocks deemed to be owned by your target for possible hosts on the same target subdomain/domain?",
         'maxnetblock': "If looking up owned netblocks, the maximum netblock size to look up all IPs within (CIDR value, 24 = /24, 16 = /16, etc.)"
     }
@@ -90,29 +88,29 @@ class sfp_shodan(SpiderFootPlugin):
 
     def queryHost(self, qry):
         res = self.sf.fetchUrl(
-            f"https://api.shodan.io/shodan/host/{qry}?key={self.opts['api_key']}",
+            f"https://api.zoomeye.org/host/{qry}?key={self.opts['api_key']}",
             timeout=self.opts['_fetchtimeout'],
             useragent="SpiderFoot"
         )
         time.sleep(1)
 
         if res['code'] in ["403", "401"]:
-            self.error("SHODAN API key seems to have been rejected or you have exceeded usage limits.")
+            self.error("ZOOMEYE API key seems to have been rejected or you have exceeded usage limits.")
             self.errorState = True
             return None
 
         if res['content'] is None:
-            self.info(f"No SHODAN info found for {qry}")
+            self.info(f"No ZOOMEYE info found for {qry}")
             return None
 
         try:
             r = json.loads(res['content'])
             if "error" in r:
-                self.error(f"Error returned from SHODAN: {r['error']}")
+                self.error(f"Error returned from ZOOMEYE: {r['error']}")
                 return None
             return r
         except Exception as e:
-            self.error(f"Error processing JSON response from SHODAN: {e}")
+            self.error(f"Error processing JSON response from ZOOMEYE: {e}")
             return None
 
         return None
@@ -124,29 +122,29 @@ class sfp_shodan(SpiderFootPlugin):
         }
 
         res = self.sf.fetchUrl(
-            f"https://api.shodan.io/shodan/host/search?{urllib.parse.urlencode(params)}",
+            f"https://api.zoomeye.org/host/search?{urllib.parse.urlencode(params)}",
             timeout=self.opts['_fetchtimeout'],
             useragent="SpiderFoot"
         )
         time.sleep(1)
 
         if res['code'] in ["403", "401"]:
-            self.error("SHODAN API key seems to have been rejected or you have exceeded usage limits.")
+            self.error("ZOOMEYE API key seems to have been rejected or you have exceeded usage limits.")
             self.errorState = True
             return None
 
         if res['content'] is None:
-            self.info(f"No SHODAN info found for {qry}")
+            self.info(f"No ZOOMEYE info found for {qry}")
             return None
 
         try:
             r = json.loads(res['content'])
             if "error" in r:
-                self.error(f"Error returned from SHODAN: {r['error']}")
+                self.error(f"Error returned from ZOOMEYE: {r['error']}")
                 return None
             return r
         except Exception as e:
-            self.error(f"Error processing JSON response from SHODAN: {e}")
+            self.error(f"Error processing JSON response from ZOOMEYE: {e}")
             return None
 
         return None
@@ -158,32 +156,32 @@ class sfp_shodan(SpiderFootPlugin):
         }
 
         res = self.sf.fetchUrl(
-            f"https://api.shodan.io/shodan/host/search?{urllib.parse.urlencode(params)}",
+            f"https://api.zoomeye.org/host/search?{urllib.parse.urlencode(params)}",
             timeout=self.opts['_fetchtimeout'],
             useragent="SpiderFoot"
         )
         time.sleep(1)
 
         if res['code'] in ["403", "401"]:
-            self.error("SHODAN API key seems to have been rejected or you have exceeded usage limits.")
+            self.error("ZOOMEYE API key seems to have been rejected or you have exceeded usage limits.")
             self.errorState = True
             return None
 
         if res['content'] is None:
-            self.info(f"No SHODAN info found for {qry}")
+            self.info(f"No ZOOMEYE info found for {qry}")
             return None
 
         try:
             r = json.loads(res['content'])
             if "error" in r:
-                self.error(f"Error returned from SHODAN: {r['error']}")
+                self.error(f"Error returned from ZOOMEYE: {r['error']}")
                 return None
             if r.get('total', 0) == 0:
-                self.info(f"No SHODAN info found for {qry}")
+                self.info(f"No ZOOMEYE info found for {qry}")
                 return None
             return r
         except Exception as e:
-            self.error(f"Error processing JSON response from SHODAN: {e}")
+            self.error(f"Error processing JSON response from ZOOMEYE: {e}")
             return None
 
         return None
@@ -200,7 +198,7 @@ class sfp_shodan(SpiderFootPlugin):
         self.debug(f"Received event, {eventName}, from {srcModuleName}")
 
         if self.opts['api_key'] == "":
-            self.error("You enabled sfp_shodan but did not set an API key!")
+            self.error("You enabled sfp_zoomeye but did not set an API key!")
             self.errorState = True
             return
 
@@ -290,7 +288,7 @@ class sfp_shodan(SpiderFootPlugin):
             if 'data' not in rec:
                 continue
 
-            self.info(f"Found SHODAN data for {eventData}")
+            self.info(f"Found ZOOMEYE data for {eventData}")
             ports = list()
             banners = list()
             asns = list()
@@ -336,4 +334,4 @@ class sfp_shodan(SpiderFootPlugin):
                             evt = SpiderFootEvent(etype, cvetext, self.__name__, pevent)
                             self.notifyListeners(evt)
 
-# End of sfp_shodan class
+# End of sfp_zoomeye class
